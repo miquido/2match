@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>no_potato</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@value@</string>
+		<key>value</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>potatos</string>
+			<key>one</key>
+			<string>potato</string>
+			<key>two</key>
+			<string>potatos</string>
+			<key>few</key>
+			<string>potatos</string>
+			<key>many</key>
+			<string>potatos</string>
+			<key>other</key>
+			<string>potatos</string>
+		</dict>
+	</dict>
+	<key>tomato</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@value@</string>
+		<key>value</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>tomatos</string>
+			<key>one</key>
+			<string>tomato</string>
+			<key>two</key>
+			<string>tomatos</string>
+			<key>few</key>
+			<string>tomatos</string>
+			<key>many</key>
+			<string>tomatos</string>
+			<key>other</key>
+			<string>tomatos</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

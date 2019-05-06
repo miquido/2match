@@ -1,0 +1,5 @@
+MODE=fromSpreadsheet
+PLATFORM=android
+RES_DIR_PATH=app/src/main/res
+INPUT_SPREADSHEET_XLSX_DOWNLOAD_URL=https://docs.google.com/spreadsheets/d/1bKvJUHpAuWC7L4BfjsGXCo433qFVCgu4bBeP7O2ijME/export?format=xlsx
+BASE_LANGUAGE_CODE=en

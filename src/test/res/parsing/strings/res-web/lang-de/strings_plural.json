@@ -1,0 +1,46 @@
+[
+  {
+    "key": "show_offers_count_format",
+    "pluralsMap": {
+      "zero": "Brak ofert_DE",
+      "one": "Pokaż %d ofertę_DE",
+      "two": "Pokaż %d offerty_DE",
+      "few": "Pokaż %d offerty_DE",
+      "many": "Pokaż %d offert_DE",
+      "other": "Pokaż %d offert_DE"
+    }
+  },
+  {
+    "key": "plural_collection_1",
+    "pluralsMap": {
+      "zero0": "Brak pokoi_DE",
+      "one0": "Ostatni pokój!_DE",
+      "two": "Ostatnie %d pokoje._DE",
+      "few": "Ostatnie %d pokoje._DE",
+      "many0": "Ostatnie %d pokoi._DE",
+      "other0": "Ostatnie %d pokoi._DE"
+    }
+  },
+  {
+    "key": "show_offers_count_format23",
+    "pluralsMap": {
+      "zero": "Brak ofert_DE",
+      "one": "Pokaż %d ofertę_DE",
+      "two": "Pokaż %d offerty_DE",
+      "few": "Pokaż %d offerty_DE",
+      "many": "Pokaż %d offert_DE",
+      "other": "Pokaż %d offert_DE"
+    }
+  },
+  {
+    "key": "show_offers_count_format3",
+    "pluralsMap": {
+      "other": "Pokaż %d offert_DE",
+      "two": "Pokaż %d offerty_DE",
+      "one": "Pokaż %d ofertę_DE",
+      "zero": "Brak ofert_DE",
+      "many": "Pokaż %d offert_DE",
+      "few": "Pokaż %d offerty_DE"
+    }
+  }
+]

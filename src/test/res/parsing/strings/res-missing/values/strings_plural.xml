@@ -1,0 +1,10 @@
+<resources>
+    <plurals name="plural_collection_1">
+        <item quantity="zero">No offers</item>
+        <item quantity="one">Show %d offer</item>
+        <item quantity="two">Show %d offers</item>
+        <item quantity="few">Show %d offers</item>
+        <item quantity="many">Show %d offers</item>
+        <item quantity="other">Show %d offers</item>
+    </plurals>
+</resources>

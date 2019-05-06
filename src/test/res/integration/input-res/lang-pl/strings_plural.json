@@ -1,0 +1,35 @@
+[
+  {
+    "key": "show_offers_count_format",
+    "pluralsMap": {
+      "zero": "Brak ofert",
+      "one": "Pokaż %d ofertę",
+      "two": "Pokaż %d offerty",
+      "few": "Pokaż %d offerty",
+      "many": "Pokaż %d offert",
+      "other": "Pokaż %d offert"
+    }
+  },
+  {
+    "key": "last_rooms_format",
+    "pluralsMap": {
+      "zero": "Brak pokoi",
+      "one": "Ostatni pokój!",
+      "two": "Ostatnie %d pokoje.",
+      "few": "Ostatnie %d pokoje.",
+      "many": "Ostatnie %d pokoi.",
+      "other": "Ostatnie %d pokoi."
+    }
+  },
+  {
+    "key": "children_format",
+    "pluralsMap": {
+      "zero": "%d dzieci",
+      "one": "%d dziecko",
+      "two": "% dzieci",
+      "few": "% dzieci",
+      "many": "% dzieci",
+      "other": "% dzieci"
+    }
+  }
+]

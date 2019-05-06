@@ -1,0 +1,35 @@
+[
+  {
+    "key": "show_offers_count_format",
+    "pluralsMap": {
+      "zero": "No offers",
+      "one": "Show %d offer",
+      "two": "Show %d offers",
+      "few": "Show %d offers",
+      "many": "Show %d offers",
+      "other": "Show %d offers"
+    }
+  },
+  {
+    "key": "last_rooms_format",
+    "pluralsMap": {
+      "zero": "No rooms",
+      "one": "Last room!",
+      "two": "Last %d rooms left",
+      "few": "Last %d rooms left",
+      "many": "Last %d rooms left",
+      "other": "Last %d rooms left"
+    }
+  },
+  {
+    "key": "children_format",
+    "pluralsMap": {
+      "zero": "%d children",
+      "one": "%d child",
+      "two": "%d children",
+      "few": "%d children",
+      "many": "%d children",
+      "other": "%d children"
+    }
+  }
+]

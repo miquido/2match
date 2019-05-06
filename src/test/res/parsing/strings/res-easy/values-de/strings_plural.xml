@@ -1,0 +1,37 @@
+<resources>
+    <plurals name="show_offers_count_format">
+        <item quantity="many">Pokaż %d offert</item>
+        <item quantity="one">Pokaż %d ofertę</item>
+        <item quantity="other">Pokaż %d offert</item>
+        <item quantity="few">Pokaż %d offerty</item>
+        <item quantity="two">Pokaż %d offerty</item>
+        <item quantity="zero">Brak ofert</item>
+    </plurals>
+
+    <plurals name="plural_collection_1">
+        <item quantity="zero0">1_Brak ofert</item>
+        <item quantity="one0">1_Pokaż %d ofertę</item>
+        <item quantity="two">1_Pokaż %d offerty</item>
+        <item quantity="few">1_Pokaż %d offerty</item>
+        <item quantity="many0">1_Pokaż %d offert</item>
+        <item quantity="other0">1_Pokaż %d offert</item>
+    </plurals>
+
+    <plurals name="show_offers_count_format_23">
+        <item quantity="zero">2_Brak ofert</item>
+        <item quantity="one">2_Pokaż %d ofertę</item>
+        <item quantity="two">2_Pokaż %d offerty</item>
+        <item quantity="few">2_Pokaż %d offerty</item>
+        <item quantity="many">2_Pokaż %d offert</item>
+        <item quantity="other">2_Pokaż %d offert</item>
+    </plurals>
+
+    <plurals name="show_offers_count_format_3">
+        <item quantity="other">3_Pokaż %d offert</item>
+        <item quantity="two">3_Pokaż %d offerty</item>
+        <item quantity="one">3_Pokaż %d ofertę</item>
+        <item quantity="zero">3_Brak ofert</item>
+        <item quantity="many">3_Pokaż %d offert</item>
+        <item quantity="few">3_Pokaż %d offerty</item>
+    </plurals>
+</resources>

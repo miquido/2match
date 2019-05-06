@@ -1,0 +1,46 @@
+[
+  {
+    "key": "cancel",
+    "value": "Anuluj_DE"
+  },
+  {
+    "key": "ok",
+    "value": "OK_DE"
+  },
+  {
+    "key": "skip",
+    "value": "Pomiń_DE"
+  },
+  {
+    "key": "yes",
+    "value": "Tak_DE"
+  },
+  {
+    "key": "no",
+    "value": "Nie_DE"
+  },
+  {
+    "key": "touch_id",
+    "value": "Touch&nbsp;ID_DE"
+  },
+  {
+    "key": "face_id",
+    "value": "Face&nbsp;ID_DE"
+  },
+  {
+    "key": "today",
+    "value": "Dzisiaj_DE"
+  },
+  {
+    "key": "yesterday",
+    "value": "Wczoraj_DE"
+  },
+  {
+    "key": "now",
+    "value": "Teraz_DE"
+  },
+  {
+    "key": "",
+    "value": "EmptyKey"
+  }
+]

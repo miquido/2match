@@ -1,0 +1,12 @@
+<resources>
+
+    <plurals name="plural_collection_1">
+        <item quantity="zero0">1_Brak ofert</item>
+        <item quantity="one0">1_Pokaż %d ofertę</item>
+        <item quantity="two">1_Pokaż %d offerty</item>
+        <item quantity="few">1_Pokaż %d offerty</item>
+        <item quantity="many">1_Pokaż %d offert</item>
+        <item quantity="other0">1_Pokaż %d offert</item>
+    </plurals>
+
+</resources>

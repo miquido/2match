@@ -1,0 +1,18 @@
+<resources>
+<plurals name="no_potato">
+<item quantity="zero">potatos</item>
+<item quantity="one">potato</item>
+<item quantity="two">potatos</item>
+<item quantity="few">potatos</item>
+<item quantity="many">potatos</item>
+<item quantity="other">potatos</item>
+</plurals>
+<plurals name="tomato">
+<item quantity="zero">tomatos</item>
+<item quantity="one">tomato</item>
+<item quantity="two">tomatos</item>
+<item quantity="few">tomatos</item>
+<item quantity="many">tomatos</item>
+<item quantity="other">tomatos</item>
+</plurals>
+</resources>

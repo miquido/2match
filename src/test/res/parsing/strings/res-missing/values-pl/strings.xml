@@ -1,0 +1,4 @@
+<resources>
+<string name="cancel" formatted="true" translatable="true">Anuluj</string>
+<string name="today" formatted="true" translatable="true">Dzisiaj</string>
+</resources>

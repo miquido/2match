@@ -1,0 +1,13 @@
+[
+  {
+    "key": "show_offers_count_format",
+    "pluralsMap": {
+      "zero": "Brak ofert",
+      "one": "Pokaż %d ofertę",
+      "two": "Pokaż %d offerty",
+      "few": "Pokaż %d offerty",
+      "many": "Pokaż %d offert",
+      "other": "Pokaż %d offert"
+    }
+  }
+]

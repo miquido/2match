@@ -1,0 +1,21 @@
+# [iOS|android|web] Platform to choose
+PLATFORM=android
+
+# used in both [fromSpreadsheet|toSpreadsheet] MODEs; Path to platform specific resource directory
+# Android - path to res directory (where values dirs are located)
+# iOS - path to main directory (where lproj dirs are located)
+# Web - path to directory where you keep your translations
+RES_DIR_PATH=res
+
+#used in [toSpreadsheet] MODE only; Path to output spreadsheet file which 2match will generate
+OUTPUT_SPREADSHEET_FILE_PATH=outputExcel.xlsx
+
+# used in [fromSpreadsheet] MODE only; full link do direct download of .xlsx file
+# format for GDocs: https://docs.google.com/spreadsheets/d/*SPREADSHEET_ID*/export?format=xlsx
+INPUT_SPREADSHEET_XLSX_DOWNLOAD_URL=https://docs.google.com/spreadsheets/d/1bKvJUHpAuWC7L4BfjsGXCo433qFVCgu4bBeP7O2ijME/export?format=xlsx
+
+# used in [fromSpreadsheet] MODE; Translations with that language code will be generated as base translations
+# Android - to values directory
+# iOS - to Base.lproj directory
+# Web - not used
+BASE_LANGUAGE_CODE=en

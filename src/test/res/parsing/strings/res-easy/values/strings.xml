@@ -1,0 +1,12 @@
+<resources>
+<string name="cancel" formatted="true" translatable="true">Cancel</string>
+<string name="ok" formatted="true" translatable="true">OK</string>
+<string name="skip" formatted="true" translatable="false">Skip</string>
+<string name="yes" formatted="true" translatable="true">Yes</string>
+<string name="no" formatted="true" translatable="true">No</string>
+<string name="touch_id" formatted="true" translatable="true">Touch&#160;ID</string>
+<string name="face_id" formatted="true" translatable="true">Face&#160;ID</string>
+<string name="today" formatted="true" translatable="true">Today</string>
+<string name="yesterday" formatted="true" translatable="true">Yesterday</string>
+<string name="" formatted="true" translatable="true">EmptyKeyTest</string>
+</resources>

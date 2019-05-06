@@ -1,0 +1,3 @@
+MODE=toSpreadsheet
+PLATFORM=android
+OUTPUT_SPREADSHEET_FILE_PATH=~/Desktop/strings_spreadsheet.xlsx

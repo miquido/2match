@@ -1,0 +1,42 @@
+[
+  {
+    "key": "cancel",
+    "value": "Cancel"
+  },
+  {
+    "key": "ok",
+    "value": "OK"
+  },
+  {
+    "key": "skip",
+    "value": "Skip"
+  },
+  {
+    "key": "yes",
+    "value": "Yes"
+  },
+  {
+    "key": "no",
+    "value": "No"
+  },
+  {
+    "key": "touch_id",
+    "value": "Touch&nbsp;ID"
+  },
+  {
+    "key": "face_id",
+    "value": "Face&nbsp;ID"
+  },
+  {
+    "key": "today",
+    "value": "Today"
+  },
+  {
+    "key": "yesterday",
+    "value": "Yesterday"
+  },
+  {
+    "key": "now",
+    "value": "Now"
+  }
+]

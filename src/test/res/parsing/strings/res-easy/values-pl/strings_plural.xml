@@ -1,0 +1,10 @@
+<resources>
+<plurals name="show_offers_count_format">
+<item quantity="zero">Brak ofert</item>
+<item quantity="one">Pokaż %d ofertę</item>
+<item quantity="two">Pokaż %d offerty</item>
+<item quantity="few">Pokaż %d offerty</item>
+<item quantity="many">Pokaż %d offert</item>
+<item quantity="other">Pokaż %d offert</item>
+</plurals>
+</resources>

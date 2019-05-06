@@ -1,0 +1,11 @@
+.idea/*
+*.iml
+output.xml
+./strings.xml
+.DS_Store
+out/
+.gradle/
+build/
+./strings.xml
+./strings_plural.xml
+res/*

@@ -1,0 +1,14 @@
+<resources>
+<plurals name="no_potato">
+<item quantity="zero">zimaników</item>
+<item quantity="one">ziemniaka</item>
+</plurals>
+<plurals name="tomato">
+<item quantity="zero">pomidorów</item>
+<item quantity="one">pomidora</item>
+<item quantity="two">pomidorów</item>
+<item quantity="few">pomidorów</item>
+<item quantity="many">pomidorów</item>
+<item quantity="other">pomidorów</item>
+</plurals>
+</resources>

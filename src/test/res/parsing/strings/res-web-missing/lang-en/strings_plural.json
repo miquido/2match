@@ -1,0 +1,13 @@
+[
+  {
+    "key": "plural_collection_1",
+    "pluralsMap": {
+      "zero": "No offers",
+      "one": "Show %d offer",
+      "two": "Show %d offers",
+      "few": "Show %d offers",
+      "many": "Show %d offers",
+      "other": "Show %d offers"
+    }
+  }
+]

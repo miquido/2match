@@ -1,0 +1,13 @@
+[
+  {
+    "key": "plural_collection_1",
+    "pluralsMap": {
+      "zero0": "Brak ofert_DE",
+      "one0": "Pokaż %d ofertę_DE",
+      "two": "Pokaż %d offerty_DE",
+      "few": "Pokaż %d offerty_DE",
+      "many": "Pokaż %d offert_DE",
+      "other0": "Pokaż %d offert_DE"
+    }
+  }
+]
