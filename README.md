@@ -1,3 +1,5 @@
+![build_info](https://travis-ci.org/miquido/2match.svg?branch=master)
+
 # README.md
 ## 2match-mobile
 
