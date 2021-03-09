@@ -1,8 +1,8 @@
 package com.miquido.stringstranslator.stringwriter
 
 import com.google.gson.Gson
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscape
 import com.miquido.stringstranslator.extensions.createRecursively
-import com.miquido.stringstranslator.extensions.escape
 import com.miquido.stringstranslator.model.configuration.Web
 import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
@@ -28,7 +28,10 @@ class WebStringWriter : StringWriter, KoinComponent {
                     Web().getPluralStringsFileName()
             )
             translationFile.printWriter().use {
-                it.write(gson.toJson(translations[langCode]).escape(Web().getEscapeMap()))
+                it.write(
+                        StringHtmlAwareEscape(gson.toJson(translations[langCode]), Web.WEB_ESCAPE_SYMBOLS_MAP)
+                                .value()
+                )
             }
             logger.info("[Web-plural] Wrote translations for language \"$langCode\"")
         }
@@ -45,7 +48,10 @@ class WebStringWriter : StringWriter, KoinComponent {
                     Web().getSingleStringsFileName()
             )
             translationFile.printWriter().use {
-                it.write(gson.toJson(translations[langCode]).escape(Web().getEscapeMap()))
+                it.write(
+                        StringHtmlAwareEscape(gson.toJson(translations[langCode]), Web.WEB_ESCAPE_SYMBOLS_MAP)
+                                .value()
+                )
             }
             logger.info("[Web] Wrote translations for language \"$langCode\"")
         }

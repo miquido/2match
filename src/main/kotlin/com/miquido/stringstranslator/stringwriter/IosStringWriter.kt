@@ -1,8 +1,8 @@
 package com.miquido.stringstranslator.stringwriter
 
 import com.dd.plist.NSDictionary
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscape
 import com.miquido.stringstranslator.extensions.createRecursively
-import com.miquido.stringstranslator.extensions.escape
 import com.miquido.stringstranslator.model.configuration.Ios
 import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
@@ -30,7 +30,8 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
                 pluralDict.put(Ios.KEY_FORMAT_SPEC, Ios.VALUE_FORMAT_SPEC)
                 pluralDict.put(Ios.KEY_FORMAT_VALUE_TYPE, Ios.VALUE_FORMAT_VALUE_TYPE)
                 translationModel.pluralsMap.forEach {
-                    pluralDict.put(it.key.toString(), it.value.escape(Ios.ESCAPE_SYMBOLS_MAP))
+                    pluralDict.put(it.key.toString(),
+                            StringHtmlAwareEscape(it.value, Ios.ESCAPE_SYMBOLS_MAP).value())
                 }
                 stringDict.put(Ios.VALUE, pluralDict)
 
@@ -75,7 +76,7 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
                 languageTranslations.value.map { translationModel ->
                     Ios.SINGLE_STRING_FORMAT.format(
                             translationModel.key,
-                            translationModel.value.escape(Ios.ESCAPE_SYMBOLS_MAP)
+                            StringHtmlAwareEscape(translationModel.value, Ios.ESCAPE_SYMBOLS_MAP).value()
                     )
                 }.forEach {
                     out.println(it)

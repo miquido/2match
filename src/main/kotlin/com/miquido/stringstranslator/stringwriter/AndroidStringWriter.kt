@@ -1,9 +1,12 @@
 package com.miquido.stringstranslator.stringwriter
 
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscape
 import com.miquido.stringstranslator.extensions.createRecursively
-import com.miquido.stringstranslator.extensions.escape
 import com.miquido.stringstranslator.model.configuration.Android
-import com.miquido.stringstranslator.model.translations.*
+import com.miquido.stringstranslator.model.translations.AndroidTranslationModel
+import com.miquido.stringstranslator.model.translations.LanguageCode
+import com.miquido.stringstranslator.model.translations.PluralTranslationModel
+import com.miquido.stringstranslator.model.translations.TranslationModel
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import org.slf4j.Logger
@@ -31,7 +34,10 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
                         out.println(Android.STRING_PLURAL_ITEM_FORMAT
                                 .format(
                                         pluralEntry.key.toString(),
-                                        pluralEntry.value.escape(Android.ANDROID_ESCAPE_SYMBOLS_MAP)
+                                        StringHtmlAwareEscape(
+                                                pluralEntry.value,
+                                                Android.ANDROID_ESCAPE_SYMBOLS_MAP
+                                        ).value()
                                 )
                         )
                     }
@@ -77,7 +83,11 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
                     Android.SINGLE_STRING_FORMAT.format(it.key,
                             it.isFormatted,
                             it.isTranslatable,
-                            it.value.escape(Android.ANDROID_ESCAPE_SYMBOLS_MAP))
+                            StringHtmlAwareEscape(
+                                    it.value,
+                                    Android.ANDROID_ESCAPE_SYMBOLS_MAP
+                            ).value()
+                    )
                 }?.forEach { out.println(it) }
                 out.println(Android.RESOURCES_CLOSE_TAG)
             }
