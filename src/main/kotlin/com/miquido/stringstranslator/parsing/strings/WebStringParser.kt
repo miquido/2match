@@ -53,7 +53,7 @@ class WebStringParser : StringParser, KoinComponent {
     }
 
     private fun takePluralStringsFromFile(path: StringsFilePath): PluralStringValuesModel {
-        val pluralStringModel = HashMap<String, PluralTranslationModel>()
+        val pluralStringModel = LinkedHashMap<String, PluralTranslationModel>()
 
         parsePluralStringResources(path.value).forEach { stringWebModel ->
             val pluralsQualifierMap: HashMap<PluralQualifier, String> = hashMapOf()

@@ -51,7 +51,7 @@ class AndroidStringParser : StringParser, KoinComponent {
     }
 
     private fun takePluralStringsFromFile(path: StringsFilePath): PluralStringValuesModel {
-        val pluralStringModel = HashMap<String, PluralTranslationModel>()
+        val pluralStringModel = LinkedHashMap<String, PluralTranslationModel>()
 
         parsePluralStringResources(path.value).stringsList.forEach { stringModel ->
             val pluralsQualifierMap: HashMap<PluralQualifier, String> = hashMapOf()

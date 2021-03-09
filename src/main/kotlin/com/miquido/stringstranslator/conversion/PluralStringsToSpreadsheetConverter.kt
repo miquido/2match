@@ -23,7 +23,7 @@ class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
         val baseLangValuesSize = stringsModel
                 .pluralString[baseLanguageCode]
                 ?.pluralStringValue?.size ?: 0
-        fillDataForRemainingLanguages(PluralStringSetModel(HashMap(mapExceptDefaultLanguage)), baseLangValuesSize)
+        fillDataForRemainingLanguages(PluralStringSetModel(LinkedHashMap(mapExceptDefaultLanguage)), baseLangValuesSize)
         return workbook
     }
 
