@@ -24,7 +24,7 @@ class SingleStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
                 .singleString
                 .filterNot { it.key == baseLanguageCode }
         fillDataForRemainingLanguages(
-                SingleStringSetModel(HashMap(mapExceptDefaultLanguage)),
+                SingleStringSetModel(LinkedHashMap(mapExceptDefaultLanguage)),
                 baseLangValuesSize
         )
         return workbook

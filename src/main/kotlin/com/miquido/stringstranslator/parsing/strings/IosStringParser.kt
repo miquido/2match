@@ -18,8 +18,8 @@ class IosStringParser : StringParser, KoinComponent {
     override fun parseStringsFile(inputStringPath: String, baseLanguageCode: String)
             : ParsedStringTranslationModel {
 
-        val singleStringsMap = HashMap<LanguageCode, SingleStringValuesModel>()
-        val pluralStringsMap = HashMap<LanguageCode, PluralStringValuesModel>()
+        val singleStringsMap = LinkedHashMap<LanguageCode, SingleStringValuesModel>()
+        val pluralStringsMap = LinkedHashMap<LanguageCode, PluralStringValuesModel>()
         File(inputStringPath).walkTopDown()
                 .map { it.invariantSeparatorsPath }
                 .filter { it.matches(Regex(STRING_FILE_PATTERN)) }
@@ -44,7 +44,7 @@ class IosStringParser : StringParser, KoinComponent {
     }
 
     private fun parseValuesForPluralsFile(filePath: StringsFilePath): PluralStringValuesModel {
-        val pluralStringsValuesModel = HashMap<String, PluralTranslationModel>()
+        val pluralStringsValuesModel = LinkedHashMap<String, PluralTranslationModel>()
         (PropertyListParser.parse(filePath.value) as NSDictionary).forEach {
             val pluralsMap = hashMapOf<PluralQualifier, String>()
             val translationModel = PluralTranslationModel(it.key, pluralsMap)
@@ -88,7 +88,7 @@ class IosStringParser : StringParser, KoinComponent {
 
         val iosStringsModel = IosSingleStringsModel()
         iosStringsModel.load(File(filePath.value))
-        val singleStringsValuesModel = HashMap<String, TranslationModel>()
+        val singleStringsValuesModel = LinkedHashMap<String, TranslationModel>()
         iosStringsModel
                 .map {
                     Pair(it.key, IosTranslationModel(it.key, it.value))

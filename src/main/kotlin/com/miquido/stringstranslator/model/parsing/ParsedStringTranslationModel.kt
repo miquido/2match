@@ -5,22 +5,22 @@ import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.TranslationModel
 
 data class ParsedStringTranslationModel(
-        val singleStringSet: SingleStringSetModel = SingleStringSetModel(hashMapOf()),
-        val pluralStringSet: PluralStringSetModel = PluralStringSetModel(hashMapOf())
+        val singleStringSet: SingleStringSetModel = SingleStringSetModel(linkedMapOf()),
+        val pluralStringSet: PluralStringSetModel = PluralStringSetModel(linkedMapOf())
 )
 
 data class SingleStringSetModel(
-        val singleString: HashMap<LanguageCode, SingleStringValuesModel> = hashMapOf()
+        val singleString: LinkedHashMap<LanguageCode, SingleStringValuesModel> = linkedMapOf()
 )
 
 data class SingleStringValuesModel(
-        val singleStringValue: HashMap<String, TranslationModel> = hashMapOf()
+        val singleStringValue: LinkedHashMap<String, TranslationModel> = linkedMapOf()
 )
 
 data class PluralStringSetModel(
-        val pluralString: HashMap<LanguageCode, PluralStringValuesModel> = hashMapOf()
+        val pluralString: LinkedHashMap<LanguageCode, PluralStringValuesModel> = linkedMapOf()
 )
 
 data class PluralStringValuesModel(
-        val pluralStringValue: HashMap<String, PluralTranslationModel> = hashMapOf()
+        val pluralStringValue: LinkedHashMap<String, PluralTranslationModel> = linkedMapOf()
 )
