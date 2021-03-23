@@ -2,12 +2,11 @@ package com.miquido.stringstranslator.parsing.spreadsheet
 
 import com.miquido.stringstranslator.extensions.escape
 
-class StringHtmlAwareEscape(
-        private val text: String,
+class StringHtmlAwareEscaper(
         private val escapeMap: Map<String, String>
 ) {
 
-    fun value(): String {
+    fun escape(text: String): String {
         var result = text
         val valuesToReplace = text.split(HTML_TAG_REGEX)
         valuesToReplace.forEach {

@@ -1,11 +1,11 @@
 package com.miquido.stringtranslator.parsing.spreadsheet
 
 import com.miquido.stringstranslator.model.configuration.Android
-import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscape
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class StringHtmlAwareEscapeTest {
+class StringHtmlAwareEscaperTest {
 
     @Test
     fun `html aware replace should process android strings correct`() {
@@ -13,7 +13,7 @@ class StringHtmlAwareEscapeTest {
         val expectedOutputs = inputOutputMap.values.toList()
 
         inputs.forEachIndexed { i, item ->
-            inputs[i] = StringHtmlAwareEscape(item, Android.ANDROID_ESCAPE_SYMBOLS_MAP).value()
+            inputs[i] = StringHtmlAwareEscaper(Android.ANDROID_ESCAPE_SYMBOLS_MAP).escape(item)
         }
 
         inputs.forEachIndexed { i, input ->

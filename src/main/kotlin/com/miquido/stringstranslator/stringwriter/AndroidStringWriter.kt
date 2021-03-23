@@ -1,12 +1,13 @@
 package com.miquido.stringstranslator.stringwriter
 
-import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscape
 import com.miquido.stringstranslator.extensions.createRecursively
 import com.miquido.stringstranslator.model.configuration.Android
 import com.miquido.stringstranslator.model.translations.AndroidTranslationModel
 import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.TranslationModel
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
+import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import org.slf4j.Logger
@@ -16,6 +17,7 @@ import java.io.PrintWriter
 class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, KoinComponent {
 
     private val logger: Logger by inject()
+    private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Android.ANDROID_ESCAPE_SYMBOLS_MAP) }
 
     override fun writePluralStringsDataToFile(
             translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
@@ -34,10 +36,7 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
                         out.println(Android.STRING_PLURAL_ITEM_FORMAT
                                 .format(
                                         pluralEntry.key.toString(),
-                                        StringHtmlAwareEscape(
-                                                pluralEntry.value,
-                                                Android.ANDROID_ESCAPE_SYMBOLS_MAP
-                                        ).value()
+                                        htmlAwareEscaper.escape(pluralEntry.value)
                                 )
                         )
                     }
@@ -83,10 +82,7 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
                     Android.SINGLE_STRING_FORMAT.format(it.key,
                             it.isFormatted,
                             it.isTranslatable,
-                            StringHtmlAwareEscape(
-                                    it.value,
-                                    Android.ANDROID_ESCAPE_SYMBOLS_MAP
-                            ).value()
+                            htmlAwareEscaper.escape(it.value)
                     )
                 }?.forEach { out.println(it) }
                 out.println(Android.RESOURCES_CLOSE_TAG)
