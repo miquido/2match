@@ -2,11 +2,12 @@ package com.miquido.stringstranslator.stringwriter
 
 import com.dd.plist.NSDictionary
 import com.miquido.stringstranslator.extensions.createRecursively
-import com.miquido.stringstranslator.extensions.escape
 import com.miquido.stringstranslator.model.configuration.Ios
 import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.TranslationModel
+import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
+import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import org.slf4j.Logger
@@ -16,6 +17,7 @@ import java.io.PrintWriter
 class IosStringWriter(private val baseLanguageCode: String) : StringWriter, KoinComponent {
 
     private val logger: Logger by inject()
+    private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Ios.ESCAPE_SYMBOLS_MAP) }
 
     override fun writePluralStringsDataToFile(
             translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
@@ -30,7 +32,7 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
                 pluralDict.put(Ios.KEY_FORMAT_SPEC, Ios.VALUE_FORMAT_SPEC)
                 pluralDict.put(Ios.KEY_FORMAT_VALUE_TYPE, Ios.VALUE_FORMAT_VALUE_TYPE)
                 translationModel.pluralsMap.forEach {
-                    pluralDict.put(it.key.toString(), it.value.escape(Ios.ESCAPE_SYMBOLS_MAP))
+                    pluralDict.put(it.key.toString(), htmlAwareEscaper.escape(it.value))
                 }
                 stringDict.put(Ios.VALUE, pluralDict)
 
@@ -75,7 +77,7 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
                 languageTranslations.value.map { translationModel ->
                     Ios.SINGLE_STRING_FORMAT.format(
                             translationModel.key,
-                            translationModel.value.escape(Ios.ESCAPE_SYMBOLS_MAP)
+                            htmlAwareEscaper.escape(translationModel.value)
                     )
                 }.forEach {
                     out.println(it)
