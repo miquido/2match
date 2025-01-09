@@ -1,6 +1,7 @@
 package com.miquido.stringstranslator.model.parsing.strings
 
-inline class AndroidStringsFilePath(override val value: String) : StringsFilePath {
+@JvmInline
+value class AndroidStringsFilePath(override val value: String) : StringsFilePath {
     override fun isPluralStringsFilePath() = value.endsWith(PLURAL_FILE_PATH_SUFFIX)
 
     //TODO refactor getting language code from path

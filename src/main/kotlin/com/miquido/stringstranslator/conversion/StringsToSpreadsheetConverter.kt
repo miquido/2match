@@ -4,14 +4,21 @@ import com.miquido.stringstranslator.extensions.createNewCellOrUseExisting
 import com.miquido.stringstranslator.extensions.createNewRowOrUseExisting
 import com.miquido.stringstranslator.extensions.escape
 import com.miquido.stringstranslator.model.configuration.Platform
-import com.miquido.stringstranslator.model.translations.*
+import com.miquido.stringstranslator.model.translations.HeaderType
+import com.miquido.stringstranslator.model.translations.ListType
+import com.miquido.stringstranslator.model.translations.ListValuesType
+import com.miquido.stringstranslator.model.translations.MapValuesType
+import com.miquido.stringstranslator.model.translations.SingleType
+import com.miquido.stringstranslator.model.translations.SingleValueType
+import com.miquido.stringstranslator.model.translations.ValuesType
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 abstract class StringsToSpreadsheetConverter(
-        protected val platform: Platform,
-        protected val baseLanguageCode: String) {
+    protected val platform: Platform,
+    protected val baseLanguageCode: String
+) {
 
     protected val workbook = XSSFWorkbook()
 
@@ -26,7 +33,8 @@ abstract class StringsToSpreadsheetConverter(
             }
 
             is MapValuesType -> {
-                val stringCellValue = row.getCell(platform.getPluralQualifierColumnIndex())?.stringCellValue
+                val stringCellValue =
+                    row.getCell(platform.getPluralQualifierColumnIndex())?.stringCellValue
                 collection.map.keys.forEach {
                     if (it.name == stringCellValue) {
                         row.createNewCellOrUseExisting(cellIndex).apply {
@@ -52,6 +60,7 @@ abstract class StringsToSpreadsheetConverter(
                     setCellValue(headerType.language)
                 }
             }
+
             is ListType -> {
                 headerType.list.forEachIndexed { headerIndex, value ->
                     labelRow.createCell(headerIndex).apply {

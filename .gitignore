@@ -9,3 +9,4 @@ build/
 ./strings.xml
 ./strings_plural.xml
 res/*
+!.idea/codeStyles/

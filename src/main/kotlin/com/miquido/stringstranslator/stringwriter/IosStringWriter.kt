@@ -7,9 +7,9 @@ import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.TranslationModel
 import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import org.slf4j.Logger
 import java.io.File
 import java.io.PrintWriter
@@ -20,8 +20,9 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
     private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Ios.ESCAPE_SYMBOLS_MAP) }
 
     override fun writePluralStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
-            output: String) {
+        translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
+        output: String
+    ) {
 
         translations?.forEach {
             val root = NSDictionary()
@@ -39,9 +40,9 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
                 root.put(translationModel.key, stringDict)
             }
             getStringsFileForLangPrintWriter(
-                    it.key,
-                    output,
-                    Ios().getPluralStringsFileName()
+                it.key,
+                output,
+                Ios().getPluralStringsFileName()
             ).use { out ->
                 out.println(root.toXMLPropertyList())
             }
@@ -50,12 +51,14 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
     }
 
     private fun getStringsFileForLangPrintWriter(
-            languageCode: LanguageCode,
-            baseOutputDir: String,
-            stringsFileName: String): PrintWriter {
+        languageCode: LanguageCode,
+        baseOutputDir: String,
+        stringsFileName: String
+    ): PrintWriter {
 
         val folderName = if (baseLanguageCode == languageCode) "Base" else languageCode
-        val file = File("$baseOutputDir${File.separator}" +
+        val file = File(
+            "$baseOutputDir${File.separator}" +
                 "$folderName.lproj${File.separator}" +
                 stringsFileName
         )
@@ -65,19 +68,20 @@ class IosStringWriter(private val baseLanguageCode: String) : StringWriter, Koin
     }
 
     override fun writeSingleStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
-            output: String) {
+        translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
+        output: String
+    ) {
 
         translations?.forEach { languageTranslations ->
             getStringsFileForLangPrintWriter(
-                    languageTranslations.key,
-                    output,
-                    Ios().getSingleStringsFileName()
+                languageTranslations.key,
+                output,
+                Ios().getSingleStringsFileName()
             ).use { out ->
                 languageTranslations.value.map { translationModel ->
                     Ios.SINGLE_STRING_FORMAT.format(
-                            translationModel.key,
-                            htmlAwareEscaper.escape(translationModel.value)
+                        translationModel.key,
+                        htmlAwareEscaper.escape(translationModel.value)
                     )
                 }.forEach {
                     out.println(it)

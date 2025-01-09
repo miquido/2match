@@ -7,9 +7,9 @@ import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.TranslationModel
 import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import org.slf4j.Logger
 import java.io.File
 
@@ -20,14 +20,15 @@ class WebStringWriter : StringWriter, KoinComponent {
     private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Web.WEB_ESCAPE_SYMBOLS_MAP) }
 
     override fun writePluralStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
-            output: String) {
+        translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
+        output: String
+    ) {
 
         translations?.keys?.forEach { langCode ->
             val translationFile = getStringsFileForLang(
-                    langCode,
-                    output,
-                    Web().getPluralStringsFileName()
+                langCode,
+                output,
+                Web().getPluralStringsFileName()
             )
             translationFile.printWriter().use {
                 it.write(htmlAwareEscaper.escape(gson.toJson(translations[langCode])))
@@ -37,14 +38,15 @@ class WebStringWriter : StringWriter, KoinComponent {
     }
 
     override fun writeSingleStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
-            output: String) {
+        translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
+        output: String
+    ) {
 
         translations?.keys?.forEach { langCode ->
             val translationFile = getStringsFileForLang(
-                    langCode,
-                    output,
-                    Web().getSingleStringsFileName()
+                langCode,
+                output,
+                Web().getSingleStringsFileName()
             )
             translationFile.printWriter().use {
                 it.write(htmlAwareEscaper.escape(gson.toJson(translations[langCode])))
@@ -54,14 +56,15 @@ class WebStringWriter : StringWriter, KoinComponent {
     }
 
     private fun getStringsFileForLang(
-            langCode: LanguageCode,
-            output: String,
-            singleStringsFileName: String): File {
+        langCode: LanguageCode,
+        output: String,
+        singleStringsFileName: String
+    ): File {
 
         return File("$output/$LANGUAGE_PREFIX$langCode/$singleStringsFileName")
-                .apply {
-                    createRecursively()
-                }
+            .apply {
+                createRecursively()
+            }
     }
 
     companion object {

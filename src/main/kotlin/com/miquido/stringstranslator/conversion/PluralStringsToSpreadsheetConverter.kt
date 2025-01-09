@@ -3,14 +3,19 @@ package com.miquido.stringstranslator.conversion
 import com.miquido.stringstranslator.extensions.createNewRowOrUseExisting
 import com.miquido.stringstranslator.model.configuration.Platform
 import com.miquido.stringstranslator.model.parsing.PluralStringSetModel
-import com.miquido.stringstranslator.model.translations.*
+import com.miquido.stringstranslator.model.translations.ListType
+import com.miquido.stringstranslator.model.translations.MapValuesType
+import com.miquido.stringstranslator.model.translations.PluralQualifier
+import com.miquido.stringstranslator.model.translations.PluralTranslationModel
+import com.miquido.stringstranslator.model.translations.SingleType
+import com.miquido.stringstranslator.model.translations.SingleValueType
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 
-class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: String)
-    : StringsToSpreadsheetConverter(platform, baseLanguageCode), KoinComponent {
+class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: String) :
+    StringsToSpreadsheetConverter(platform, baseLanguageCode), KoinComponent {
 
     private val logger: Logger by inject()
     private val pluralStringSheet = workbook.createSheet(PLURAL_STRINGS_SHEET_NAME)
@@ -18,19 +23,19 @@ class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
     fun convertPluralStringModel(stringsModel: PluralStringSetModel): XSSFWorkbook {
         fillDataForDefaultLanguage(stringsModel)
         val mapExceptDefaultLanguage = stringsModel
-                .pluralString
-                .filterNot { it.key == baseLanguageCode }
+            .pluralString
+            .filterNot { it.key == baseLanguageCode }
         val baseLangValuesSize = stringsModel
-                .pluralString[baseLanguageCode]
-                ?.pluralStringValue?.size ?: 0
+            .pluralString[baseLanguageCode]
+            ?.pluralStringValue?.size ?: 0
         fillDataForRemainingLanguages(PluralStringSetModel(LinkedHashMap(mapExceptDefaultLanguage)), baseLangValuesSize)
         return workbook
     }
 
     private fun fillDataForDefaultLanguage(stringsModel: PluralStringSetModel) {
         val pluralStringValue = stringsModel
-                .pluralString[baseLanguageCode]
-                ?.pluralStringValue
+            .pluralString[baseLanguageCode]
+            ?.pluralStringValue
 
         if (pluralStringValue?.size == 0) {
             logger.warn("No plural string keys in spreadsheet for ${platform.getName()} platform")
@@ -42,8 +47,8 @@ class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
 
         fillHeaders(ListType(BASIC_HEADERS), pluralStringSheet)
         fillHeaders(
-                SingleType(baseLanguageCode, Platform.FIRST_PLURAL_STRINGS_TRANSLATION_COLUMN_INDEX),
-                pluralStringSheet
+            SingleType(baseLanguageCode, Platform.FIRST_PLURAL_STRINGS_TRANSLATION_COLUMN_INDEX),
+            pluralStringSheet
         )
         fillPluralQualifierCells(pluralStringValue?.keys?.size ?: 0)
     }
@@ -54,43 +59,40 @@ class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
             val currentRowIndex = VALUE_ROW + keyRowIndex
 
             val keyRow = pluralStringSheet.getRow(currentRowIndex)
-            val cellKeyValue = if (keyRow != null) {
-                keyRow.getCell(platform.getPluralKeyColumnIndex())?.stringCellValue.orEmpty()
-            } else {
-                ""
-            }
+            val cellKeyValue = keyRow
+                ?.getCell(platform.getPluralKeyColumnIndex())
+                ?.stringCellValue
+                .orEmpty()
 
             stringsModel.pluralString.keys.forEachIndexed { languageIndex, languageCode ->
                 stringsModel.pluralString[languageCode]?.pluralStringValue
-                        ?.forEach { pluralKey, pluralTranslationModel ->
+                    ?.forEach { (pluralKey, pluralTranslationModel) ->
 
-                            fillHeaders(
-                                    SingleType(languageCode, FIRST_NOT_DEFAULT_LANGUAGE_INDEX + languageIndex),
-                                    pluralStringSheet
-                            )
+                        fillHeaders(
+                            SingleType(languageCode, FIRST_NOT_DEFAULT_LANGUAGE_INDEX + languageIndex),
+                            pluralStringSheet
+                        )
 
-                            if (pluralKey.toLowerCase() == cellKeyValue.toLowerCase()) {
-                                for (index in (0 until PLURALS_TYPE_NUMBER)) {
-                                    val row = pluralStringSheet
-                                            .createNewRowOrUseExisting(currentRowIndex + index)
-                                    val pluralKeyValue = row
-                                            .getCell(platform.getPluralQualifierColumnIndex()).stringCellValue
+                        if (pluralKey.equals(other = cellKeyValue, ignoreCase = true)) {
+                            for (index in (0 until PLURALS_TYPE_NUMBER)) {
+                                val row = pluralStringSheet.createNewRowOrUseExisting(currentRowIndex + index)
+                                val pluralKeyValue = row.getCell(platform.getPluralQualifierColumnIndex()).stringCellValue
 
-                                    pluralTranslationModel.pluralsMap
-                                            .filter { it.key.name.toLowerCase() == pluralKeyValue.toLowerCase() }
-                                            .map { it.key }
-                                            .firstOrNull()
-                                            .takeIf { it != null && pluralTranslationModel.pluralsMap.containsKey(it) }
-                                            ?.let {
-                                                fillValues(
-                                                        SingleValueType(pluralTranslationModel.pluralsMap.getValue(it)),
-                                                        row,
-                                                        FIRST_NOT_DEFAULT_LANGUAGE_INDEX + languageIndex
-                                                )
-                                            }
-                                }
+                                pluralTranslationModel.pluralsMap
+                                    .filter { it.key.name.lowercase() == pluralKeyValue.lowercase() }
+                                    .map { it.key }
+                                    .firstOrNull()
+                                    .takeIf { it != null && pluralTranslationModel.pluralsMap.containsKey(it) }
+                                    ?.let {
+                                        fillValues(
+                                            SingleValueType(pluralTranslationModel.pluralsMap.getValue(it)),
+                                            row,
+                                            FIRST_NOT_DEFAULT_LANGUAGE_INDEX + languageIndex
+                                        )
+                                    }
                             }
                         }
+                    }
             }
         }
     }
@@ -103,37 +105,20 @@ class PluralStringsToSpreadsheetConverter(platform: Platform, baseLanguageCode: 
             val row = pluralStringSheet.createNewRowOrUseExisting(currentRowIndex)
 
             if (index == 0) {
-                fillValues(
-                        SingleValueType(pluralTranslationModel.key),
-                        row,
-                        platform.getPluralKeyColumnIndex()
-                )
+                fillValues(SingleValueType(pluralTranslationModel.key), row, platform.getPluralKeyColumnIndex())
             }
-            fillValues(
-                    SingleValueType(pluralQualifier.name),
-                    row,
-                    platform.getPluralQualifierColumnIndex()
-            )
-            fillValues(
-                    MapValuesType(pluralTranslationModel.pluralsMap),
-                    row,
-                    Platform.FIRST_PLURAL_STRINGS_TRANSLATION_COLUMN_INDEX
-            )
+            fillValues(SingleValueType(pluralQualifier.name), row, platform.getPluralQualifierColumnIndex())
+            fillValues(MapValuesType(pluralTranslationModel.pluralsMap), row, Platform.FIRST_PLURAL_STRINGS_TRANSLATION_COLUMN_INDEX)
         }
     }
 
     private fun fillPluralQualifierCells(numberOfPluralKeys: Int) {
         for (i in 0 until DEFAULT_QUALIFIER_COLLECTIONS_COUNT) {
             val qualifierStartRowIndex = PLURALS_TYPE_NUMBER * i + VALUE_ROW
-            PluralQualifier.values().forEachIndexed { qualifierIndex, pluralQualifier ->
-                val currentRowIndex =
-                        (numberOfPluralKeys * PLURALS_TYPE_NUMBER) + qualifierIndex + qualifierStartRowIndex
+            PluralQualifier.entries.forEachIndexed { qualifierIndex, pluralQualifier ->
+                val currentRowIndex = (numberOfPluralKeys * PLURALS_TYPE_NUMBER) + qualifierIndex + qualifierStartRowIndex
                 val row = pluralStringSheet.createNewRowOrUseExisting(currentRowIndex)
-                fillValues(
-                        SingleValueType(pluralQualifier.name),
-                        row,
-                        platform.getPluralQualifierColumnIndex()
-                )
+                fillValues(SingleValueType(pluralQualifier.name), row, platform.getPluralQualifierColumnIndex())
             }
         }
     }

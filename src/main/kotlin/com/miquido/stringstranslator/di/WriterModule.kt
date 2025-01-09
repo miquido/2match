@@ -2,7 +2,7 @@ package com.miquido.stringstranslator.di
 
 import com.miquido.stringstranslator.parsing.spreadsheet.StringHtmlAwareEscaper
 import com.miquido.stringstranslator.stringwriter.StringWriterFactory
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 
 val writerModule = module {
     single { StringWriterFactory() }

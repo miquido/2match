@@ -37,7 +37,6 @@ class StringPluralsResources {
     @set:ElementList(required = false, inline = true)
     @get:ElementList(required = false, inline = true)
     var stringsList = mutableListOf<PluralStringModel>()
-
 }
 
 @Root(name = "plurals")
@@ -46,10 +45,10 @@ class PluralStringModel {
     @set:Attribute
     @get:Attribute
     var name: String = ""
+
     @set:ElementList(required = false, inline = true)
     @get:ElementList(required = false, inline = true)
     var quantityList = mutableListOf<Item>()
-
 }
 
 @Root(name = "item")
@@ -62,5 +61,4 @@ class Item {
     @set:Text(required = true)
     @get:Text(required = true)
     var text: String = ""
-
 }

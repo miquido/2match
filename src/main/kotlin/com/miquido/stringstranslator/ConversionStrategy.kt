@@ -15,22 +15,26 @@ class ConversionStrategyFactory {
         val tmpFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX)
         return when (config.mode) {
             Mode.TO_SPREADSHEET -> setOf(
-                    ToSpreadsheetConversionTask(
-                            config.resDirPath,
-                            config.outputExcelFilePath,
-                            config.platform,
-                            config.baseLanguageCode)
+                ToSpreadsheetConversionTask(
+                    config.resDirPath,
+                    config.outputExcelFilePath,
+                    config.platform,
+                    config.baseLanguageCode
+                )
             )
+
             Mode.FROM_SPREADSHEET -> setOf(
-                    SpreadsheetDownloaderTask(
-                            config.inputSpreadsheetXlsxDownloadUrl,
-                            tmpFile.absolutePath),
-                    FromSpreadsheetConversionTask(
-                            tmpFile.absolutePath,
-                            config.resDirPath,
-                            config.platform,
-                            config.baseLanguageCode),
-                    DeleteFileTask(tmpFile.absolutePath)
+                SpreadsheetDownloaderTask(
+                    config.inputSpreadsheetXlsxDownloadUrl,
+                    tmpFile.absolutePath
+                ),
+                FromSpreadsheetConversionTask(
+                    tmpFile.absolutePath,
+                    config.resDirPath,
+                    config.platform,
+                    config.baseLanguageCode
+                ),
+                DeleteFileTask(tmpFile.absolutePath)
             )
         }
     }

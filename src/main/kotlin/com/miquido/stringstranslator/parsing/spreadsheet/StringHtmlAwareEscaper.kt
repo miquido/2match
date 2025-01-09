@@ -3,7 +3,7 @@ package com.miquido.stringstranslator.parsing.spreadsheet
 import com.miquido.stringstranslator.extensions.escape
 
 class StringHtmlAwareEscaper(
-        private val escapeMap: Map<String, String>
+    private val escapeMap: Map<String, String>
 ) {
 
     fun escape(text: String): String {
@@ -19,4 +19,3 @@ class StringHtmlAwareEscaper(
         private val HTML_TAG_REGEX = Regex("<([^<])*?>")
     }
 }
-

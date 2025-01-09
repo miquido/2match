@@ -2,8 +2,8 @@ package com.miquido.stringstranslator.task
 
 import com.miquido.stringstranslator.download.FileDownloadService
 import okhttp3.ResponseBody
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 import java.io.File
 import java.io.IOException

@@ -9,8 +9,8 @@ import com.miquido.stringstranslator.model.parsing.strings.StringsFilePathFactor
 import com.miquido.stringstranslator.model.translations.PluralQualifier
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
 import com.miquido.stringstranslator.model.translations.WebTranslationModel
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 import java.io.File
 import java.nio.charset.Charset
@@ -21,34 +21,34 @@ class WebStringParser : StringParser, KoinComponent {
     private val stringsFilePathFactory: StringsFilePathFactory by inject()
     private val logger: Logger by inject()
 
-    override fun parseStringsFile(inputStringPath: String, baseLanguageCode: String)
-            : ParsedStringTranslationModel {
-
+    override fun parseStringsFile(inputStringPath: String, baseLanguageCode: String): ParsedStringTranslationModel {
         return ParsedStringTranslationModel(
-                generateStringModel(inputStringPath, baseLanguageCode).singleStringSet,
-                generateStringModel(inputStringPath, baseLanguageCode).pluralStringSet)
+            generateStringModel(inputStringPath, baseLanguageCode).singleStringSet,
+            generateStringModel(inputStringPath, baseLanguageCode).pluralStringSet
+        )
     }
 
     private fun generateStringModel(input: String, baseLangCode: String)
-            : ParsedStringTranslationModel {
+        : ParsedStringTranslationModel {
 
         val data = ParsedStringTranslationModel()
-        File(input).walkTopDown()
-                .map { it.invariantSeparatorsPath }
-                .filter { it.matches(Regex(STRING_FILE_PATTERN)) }
-                .filterNotNull()
-                .forEach {
-                    val stringsFilePath = stringsFilePathFactory.getStringsFilePath(Web(), it)
-                    val languageCode = stringsFilePath.getLanguageCodeFromPath(baseLangCode)
+        File(input)
+            .walkTopDown()
+            .map { it.invariantSeparatorsPath }
+            .filter { it.matches(Regex(STRING_FILE_PATTERN)) }
+            .filterNotNull()
+            .forEach {
+                val stringsFilePath = stringsFilePathFactory.getStringsFilePath(Web(), it)
+                val languageCode = stringsFilePath.getLanguageCodeFromPath(baseLangCode)
 
-                    if (stringsFilePath.isPluralStringsFilePath()) {
-                        data.pluralStringSet.pluralString[languageCode] =
-                                takePluralStringsFromFile(stringsFilePath)
-                    } else {
-                        data.singleStringSet.singleString[languageCode] =
-                                takeSingleStringsFromFile(stringsFilePath)
-                    }
+                if (stringsFilePath.isPluralStringsFilePath()) {
+                    data.pluralStringSet.pluralString[languageCode] =
+                        takePluralStringsFromFile(stringsFilePath)
+                } else {
+                    data.singleStringSet.singleString[languageCode] =
+                        takeSingleStringsFromFile(stringsFilePath)
                 }
+            }
         return data
     }
 
@@ -60,27 +60,27 @@ class WebStringParser : StringParser, KoinComponent {
 
             stringWebModel.pluralsMap.keys.forEach { key ->
                 val pluralQualifier =
-                        try {
-                            PluralQualifier.valueOf(key.toUpperCase())
-                        } catch (exception: IllegalArgumentException) {
-                            logger.error(
-                                    "Could not find quantity constant for: $key" +
-                                            "Possible values include: " +
-                                            PluralQualifier.values().joinToString(separator = ","),
-                                    exception
-                            )
-                            null
-                        }
+                    try {
+                        PluralQualifier.valueOf(key.uppercase())
+                    } catch (exception: IllegalArgumentException) {
+                        logger.error(
+                            "Could not find quantity constant for: $key" +
+                                "Possible values include: " +
+                                PluralQualifier.entries.joinToString(separator = ","),
+                            exception
+                        )
+                        null
+                    }
                 if (pluralQualifier != null) {
                     pluralsQualifierMap[pluralQualifier] = stringWebModel
-                            .pluralsMap
-                            .getValue(pluralQualifier.name.toLowerCase())
+                        .pluralsMap
+                        .getValue(pluralQualifier.name.lowercase())
                 }
             }
 
             if (stringWebModel.key.isNotEmpty()) {
                 pluralStringModel[stringWebModel.key] =
-                        PluralTranslationModel(stringWebModel.key, pluralsQualifierMap)
+                    PluralTranslationModel(stringWebModel.key, pluralsQualifierMap)
             }
         }
         return PluralStringValuesModel(pluralStringModel)
@@ -99,27 +99,27 @@ class WebStringParser : StringParser, KoinComponent {
     private fun parsePluralStringResources(input: String): List<PluralStringJsonModel> {
         val jsonReader = createJsonReader(input)
         return jsonReader
-                .use {
-                    gson.fromJson<Array<PluralStringJsonModel>>(
-                            it, Array<PluralStringJsonModel>::class.java
-                    )
-                            .toList()
-                }
+            .use {
+                gson.fromJson<Array<PluralStringJsonModel>>(
+                    it, Array<PluralStringJsonModel>::class.java
+                )
+                    .toList()
+            }
     }
 
     private fun parseSingleStringResources(input: String): List<SingleStringJsonModel> {
         val jsonReader = createJsonReader(input)
         return jsonReader
-                .use {
-                    gson.fromJson<Array<SingleStringJsonModel>>(
-                            it, Array<SingleStringJsonModel>::class.java
-                    )
-                            .toList()
-                }
+            .use {
+                gson.fromJson<Array<SingleStringJsonModel>>(
+                    it, Array<SingleStringJsonModel>::class.java
+                )
+                    .toList()
+            }
     }
 
     private fun createJsonReader(path: String) =
-            JsonReader(File(path).reader(Charset.forName(CHARSET_NAME)))
+        JsonReader(File(path).reader(Charset.forName(CHARSET_NAME)))
 
     private companion object {
         private const val STRING_FILE_PATTERN = ".*/lang-.*/strings.*\\.json"

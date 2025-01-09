@@ -6,15 +6,15 @@ import com.miquido.stringstranslator.model.configuration.Platform
 import com.miquido.stringstranslator.parsing.spreadsheet.SpreadsheetParser
 import com.miquido.stringstranslator.stringwriter.StringWriterFactory
 import com.miquido.stringstranslator.task.InputOutputTask
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 
 class FromSpreadsheetConversionTask(
-        input: String,
-        output: String,
-        private val platform: Platform,
-        private val baseLangCode: String
+    input: String,
+    output: String,
+    private val platform: Platform,
+    private val baseLangCode: String
 ) : InputOutputTask(input, output), KoinComponent {
 
     private val spreadsheetParser: SpreadsheetParser by inject()

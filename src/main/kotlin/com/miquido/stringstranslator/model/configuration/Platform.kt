@@ -3,17 +3,18 @@ package com.miquido.stringstranslator.model.configuration
 import com.uchuhimo.collections.BiMap
 import com.uchuhimo.collections.biMapOf
 
-
 class PlatformFactory {
     /**
      * @return Platform implementation based on configuration string
      */
-    fun getPlatform(platformString: String) = when (platformString.toLowerCase()) {
+    fun getPlatform(platformString: String) = when (platformString.lowercase()) {
         PLATFORM_STRING_IOS -> Ios()
         PLATFORM_STRING_ANDROID -> Android()
         PLATFORM_STRING_WEB -> Web()
-        else -> throw UnsupportedOperationException("Unknown platform: $platformString. " +
-                "Use android | iOS")
+        else -> throw UnsupportedOperationException(
+            "Unknown platform: $platformString. " +
+                "Use android | iOS"
+        )
     }
 
     companion object {
@@ -90,9 +91,10 @@ class Ios : Platform() {
          * Map with characters that need escaping when putting them in strings
          */
         val ESCAPE_SYMBOLS_MAP = biMapOf(
-                "\"" to "\\\"",
-                "%s" to "%@",
-                "[_]" to "\\U00A0")
+            "\"" to "\\\"",
+            "%s" to "%@",
+            "[_]" to "\\U00A0"
+        )
 
         private const val KEY_COLUMN_INDEX = 0
         private const val PLATFORM_NAME = "iOS"
@@ -118,7 +120,6 @@ class Android : Platform() {
 
     override fun getPluralKeyColumnIndex() = KEY_COLUMN_INDEX
 
-
     companion object {
 
         /**
@@ -131,10 +132,10 @@ class Android : Platform() {
          */
         const val FORMATTED_COLUMN_INDEX = 3
 
-
         const val RESOURCES_OPEN_TAG = "<resources>"
         const val RESOURCES_CLOSE_TAG = "</resources>"
-        const val SINGLE_STRING_FORMAT = "<string name=\"%s\" formatted=\"%b\" translatable=\"%b\">%s</string>"
+        const val SINGLE_STRING_FORMAT =
+            "<string name=\"%s\" formatted=\"%b\" translatable=\"%b\">%s</string>"
         const val STRING_PLURAL_PARENT_TAG_START_FORMAT = "<plurals name=\"%s\">"
         const val STRING_PLURAL_PARENT_TAG_END = "</plurals>"
         const val STRING_PLURAL_ITEM_FORMAT = "<item quantity=\"%s\">%s</item>"
@@ -143,13 +144,14 @@ class Android : Platform() {
          * Map with characters that need escaping when putting them in strings
          */
         val ANDROID_ESCAPE_SYMBOLS_MAP = biMapOf(
-                "@" to "\\@",
-                "?" to "\\?",
-                "<" to "&lt;",
-                "&" to "&amp;",
-                "'" to "\\'",
-                "\"" to "\\\"",
-                "[_]" to "&#160;")
+            "@" to "\\@",
+            "?" to "\\?",
+            "<" to "&lt;",
+            "&" to "&amp;",
+            "'" to "\\'",
+            "\"" to "\\\"",
+            "[_]" to "&#160;"
+        )
 
         private const val KEY_COLUMN_INDEX = 1
         private const val PLATFORM_NAME = "Android"
@@ -182,6 +184,7 @@ class Web : Platform() {
         private const val SINGLE_STRINGS_FILE_NAME = "strings.json"
         private const val PLURAL_STRINGS_FILE_NAME = "strings_plural.json"
         val WEB_ESCAPE_SYMBOLS_MAP = biMapOf(
-                "[_]" to "&nbsp;")
+            "[_]" to "&nbsp;"
+        )
     }
 }

@@ -8,16 +8,16 @@ import com.miquido.stringstranslator.parsing.strings.StringParserFactory
 import com.miquido.stringstranslator.task.InputOutputTask
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 import java.io.FileOutputStream
 
 class ToSpreadsheetConversionTask(
-        input: String,
-        output: String,
-        private val platform: Platform,
-        private val baseLanguageCode: String
+    input: String,
+    output: String,
+    private val platform: Platform,
+    private val baseLanguageCode: String
 ) : InputOutputTask(input, output), KoinComponent {
 
     private val stringParserFactory: StringParserFactory by inject()
@@ -28,19 +28,22 @@ class ToSpreadsheetConversionTask(
         val parser = stringParserFactory.getStringParser(platform)
         val parsedStringsFile = parser.parseStringsFile(input, baseLanguageCode)
         val singleStringsWorkbook = SingleStringsToSpreadsheetConverter(platform, baseLanguageCode)
-                .convertSingleStringModel(parsedStringsFile.singleStringSet)
+            .convertSingleStringModel(parsedStringsFile.singleStringSet)
         val pluralStringsWorkbook = PluralStringsToSpreadsheetConverter(platform, baseLanguageCode)
-                .convertPluralStringModel(parsedStringsFile.pluralStringSet)
-        mergeSheetsIntoFinalWorkbook(output,
-                singleStringsWorkbook.getSheet(SingleStringsToSpreadsheetConverter.SINGLE_STRINGS_SHEET_NAME),
-                pluralStringsWorkbook.getSheet(PluralStringsToSpreadsheetConverter.PLURAL_STRINGS_SHEET_NAME))
+            .convertPluralStringModel(parsedStringsFile.pluralStringSet)
+        mergeSheetsIntoFinalWorkbook(
+            output,
+            singleStringsWorkbook.getSheet(SingleStringsToSpreadsheetConverter.SINGLE_STRINGS_SHEET_NAME),
+            pluralStringsWorkbook.getSheet(PluralStringsToSpreadsheetConverter.PLURAL_STRINGS_SHEET_NAME)
+        )
         logger.info("Done!")
     }
 
     private fun mergeSheetsIntoFinalWorkbook(
-            output: String,
-            singleStringsSheetSource: XSSFSheet,
-            pluralStringsSheetSource: XSSFSheet) {
+        output: String,
+        singleStringsSheetSource: XSSFSheet,
+        pluralStringsSheetSource: XSSFSheet
+    ) {
 
         val mergedWorkBook = XSSFWorkbook()
         val newSingleStringsSheet = mergedWorkBook.createSheet(singleStringsSheetSource.sheetName)

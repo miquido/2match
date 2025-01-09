@@ -6,8 +6,8 @@ import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.WorkbookFactory
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.Logger
 import java.io.File
 
@@ -23,8 +23,8 @@ class SpreadsheetParser : KoinComponent {
             val singleStringsSheet = it.getSheetAt(SINGLE_STRINGS_SHEET_POSITION)
             val pluralStringsSheet = it.getSheetAt(PLURAL_STRINGS_SHEET_POSITION)
             ParsedRawTranslationsModel(
-                    parseSheet(singleStringsSheet),
-                    parseSheet(pluralStringsSheet)
+                parseSheet(singleStringsSheet),
+                parseSheet(pluralStringsSheet)
             )
         }
     }
@@ -35,13 +35,13 @@ class SpreadsheetParser : KoinComponent {
 
         workSheet?.let { sheet ->
             val workSheetColumnsCount = sheet.getRow(0)
-                    .count { it.cellType != CellType.BLANK && it.stringCellValue.isNotBlank() }
+                .count { it.cellType != CellType.BLANK && it.stringCellValue.isNotBlank() }
             for (row in sheet) {
                 if (row.isEmpty()) break
                 val dataRow = mutableListOf<String>()
                 (0 until workSheetColumnsCount)
-                        .map { columnIndex -> row.getCell(columnIndex) }
-                        .forEach { dataRow.add(dataFormatter.formatCellValue(it)) }
+                    .map { columnIndex -> row.getCell(columnIndex) }
+                    .forEach { dataRow.add(dataFormatter.formatCellValue(it)) }
                 rawWorkSheet.add(dataRow)
             }
         }

@@ -12,8 +12,9 @@ import com.miquido.stringtranslator.di.testDiModules
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.koin.standalone.StandAloneContext
-import org.koin.standalone.inject
+import org.koin.core.component.inject
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
 import org.koin.test.KoinTest
 import java.io.File
 import kotlin.test.assertEquals
@@ -25,45 +26,47 @@ class IntegrationTests : KoinTest {
 
     @Before
     fun setup() {
-        StandAloneContext.startKoin(testDiModules)
+        startKoin { modules(testDiModules) }
         File(TMP_INPUT_RECREATED_DIR).mkdirs()
     }
 
     @After
     fun tearDown() {
         DeleteFileTask(TMP_DIR).start()
-        StandAloneContext.stopKoin()
+        stopKoin()
     }
 
     @Test
     fun `converting (fromSpreadsheet-toSpreadsheet) should give same result for both platforms`() {
         setOf(Android(), Ios(), Web()).forEach {
             val fromSpreadsheetConversionTask =
-                    FromSpreadsheetConversionTask(
-                            ORIGINAL_INPUT_FILE,
-                            INTEGRATION_TMP_RES_OUTPUT_DIR,
-                            it,
-                            BASE_LANGUAGE_CODE
-                    )
+                FromSpreadsheetConversionTask(
+                    ORIGINAL_INPUT_FILE,
+                    INTEGRATION_TMP_RES_OUTPUT_DIR,
+                    it,
+                    BASE_LANGUAGE_CODE
+                )
             fromSpreadsheetConversionTask.start()
 
             val toSpreadsheetConversionTask =
-                    ToSpreadsheetConversionTask(
-                            INTEGRATION_TMP_RES_OUTPUT_DIR,
-                            INTEGRATION_TMP_INPUT_RECREATED_FILE,
-                            it,
-                            BASE_LANGUAGE_CODE
-                    )
+                ToSpreadsheetConversionTask(
+                    INTEGRATION_TMP_RES_OUTPUT_DIR,
+                    INTEGRATION_TMP_INPUT_RECREATED_FILE,
+                    it,
+                    BASE_LANGUAGE_CODE
+                )
             toSpreadsheetConversionTask.start()
 
             val originalInput =
-                    spreadSheetParser.parseXlsFile(ORIGINAL_INPUT_FILE)
+                spreadSheetParser.parseXlsFile(ORIGINAL_INPUT_FILE)
             val recreatedInput =
-                    spreadSheetParser.parseXlsFile(INTEGRATION_TMP_INPUT_RECREATED_FILE)
+                spreadSheetParser.parseXlsFile(INTEGRATION_TMP_INPUT_RECREATED_FILE)
 
-            assertEquals(originalInput.stringsSingle.size, recreatedInput.stringsSingle.size,
-                    "Recreated input for single strings " +
-                            "has different single strings count for platform ${it.getName()}")
+            assertEquals(
+                originalInput.stringsSingle.size, recreatedInput.stringsSingle.size,
+                "Recreated input for single strings " +
+                    "has different single strings count for platform ${it.getName()}"
+            )
         }
     }
 
@@ -71,39 +74,41 @@ class IntegrationTests : KoinTest {
     fun `converting (toSpreadsheet-fromSpreadsheet) should give same result for both platforms`() {
         setOf(Android(), Ios(), Web()).forEach {
             val toSpreadsheetConversionTask =
-                    ToSpreadsheetConversionTask(
-                            ORIGINAL_INPUT_RES_DIR,
-                            INTEGRATION_TMP_XLS_OUTPUT,
-                            it,
-                            BASE_LANGUAGE_CODE
-                    )
+                ToSpreadsheetConversionTask(
+                    ORIGINAL_INPUT_RES_DIR,
+                    INTEGRATION_TMP_XLS_OUTPUT,
+                    it,
+                    BASE_LANGUAGE_CODE
+                )
             toSpreadsheetConversionTask.start()
 
             val fromSpreadsheetConversionTask =
-                    FromSpreadsheetConversionTask(
-                            INTEGRATION_TMP_XLS_OUTPUT,
-                            TMP_INPUT_RECREATED_DIR,
-                            it,
-                            BASE_LANGUAGE_CODE
-                    )
+                FromSpreadsheetConversionTask(
+                    INTEGRATION_TMP_XLS_OUTPUT,
+                    TMP_INPUT_RECREATED_DIR,
+                    it,
+                    BASE_LANGUAGE_CODE
+                )
             fromSpreadsheetConversionTask.start()
 
             val stringParser = stringParFactory.getStringParser(it)
             val originalInput =
-                    stringParser.parseStringsFile(
-                            ORIGINAL_INPUT_RES_DIR,
-                            BASE_LANGUAGE_CODE
-                    )
+                stringParser.parseStringsFile(
+                    ORIGINAL_INPUT_RES_DIR,
+                    BASE_LANGUAGE_CODE
+                )
             val recreatedInput =
-                    stringParser.parseStringsFile(
-                            TMP_INPUT_RECREATED_DIR,
-                            BASE_LANGUAGE_CODE
-                    )
+                stringParser.parseStringsFile(
+                    TMP_INPUT_RECREATED_DIR,
+                    BASE_LANGUAGE_CODE
+                )
 
-            assertEquals(originalInput.singleStringSet.singleString.keys.size,
-                    recreatedInput.singleStringSet.singleString.keys.size,
-                    "Recreated input for single strings " +
-                            "has different single strings count for platform ${it.getName()}")
+            assertEquals(
+                originalInput.singleStringSet.singleString.keys.size,
+                recreatedInput.singleStringSet.singleString.keys.size,
+                "Recreated input for single strings " +
+                    "has different single strings count for platform ${it.getName()}"
+            )
         }
     }
 
@@ -116,7 +121,6 @@ class IntegrationTests : KoinTest {
         private const val INTEGRATION_TMP_RES_OUTPUT_DIR = "$TMP_DIR/res"
         private const val INTEGRATION_TMP_XLS_OUTPUT = "$TMP_DIR/output.xlsx"
         private const val INTEGRATION_TMP_INPUT_RECREATED_FILE =
-                "$TMP_INPUT_RECREATED_DIR/input_recreated.xlsx"
-
+            "$TMP_INPUT_RECREATED_DIR/input_recreated.xlsx"
     }
 }

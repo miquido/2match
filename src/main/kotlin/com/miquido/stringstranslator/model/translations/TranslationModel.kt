@@ -7,10 +7,10 @@ typealias PlatformKey = String
 sealed class TranslationModel(val key: String, val value: String)
 
 class AndroidTranslationModel(
-        key: String,
-        value: String,
-        val isTranslatable: Boolean = true,
-        val isFormatted: Boolean = true
+    key: String,
+    value: String,
+    val isTranslatable: Boolean = true,
+    val isFormatted: Boolean = true
 ) : TranslationModel(key, value)
 
 class IosTranslationModel(key: String, value: String) : TranslationModel(key, value)
@@ -18,11 +18,11 @@ class IosTranslationModel(key: String, value: String) : TranslationModel(key, va
 class WebTranslationModel(key: String, value: String) : TranslationModel(key, value)
 
 data class SingleStringsTranslations(
-        val platforms: MutableMap<PlatformKey, MutableMap<LanguageCode, MutableList<TranslationModel>>>
+    val platforms: MutableMap<PlatformKey, MutableMap<LanguageCode, MutableList<TranslationModel>>>
 )
 
 data class PluralStringsTranslations(
-        val platforms: MutableMap<PlatformKey, MutableMap<LanguageCode, MutableList<PluralTranslationModel>>>
+    val platforms: MutableMap<PlatformKey, MutableMap<LanguageCode, MutableList<PluralTranslationModel>>>
 )
 
 enum class PluralQualifier {
@@ -33,7 +33,7 @@ enum class PluralQualifier {
     MANY,
     OTHER;
 
-    override fun toString() = super.toString().toLowerCase()
+    override fun toString() = super.toString().lowercase()
 }
 
 class PluralTranslationModel(val key: String, val pluralsMap: Map<PluralQualifier, String>)

@@ -12,7 +12,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.koin.standalone.StandAloneContext
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
 import org.slf4j.helpers.NOPLogger
 
 class LocalModelAndroidSingleStringsTest {
@@ -23,16 +24,16 @@ class LocalModelAndroidSingleStringsTest {
 
     @Before
     fun setup() {
-        StandAloneContext.startKoin(testDiModules)
+        startKoin { modules(testDiModules) }
         valuesFromParsedFile = spreadsheetParser.parseXlsFile(FILE_PATH)
         localModel = valuesFromParsedFile
-                .stringsSingle
-                .mapToSingleStringsLocalModel(Android(), NOPLogger.NOP_LOGGER)
+            .stringsSingle
+            .mapToSingleStringsLocalModel(Android(), NOPLogger.NOP_LOGGER)
     }
 
     @After
     fun tearDown() {
-        StandAloneContext.stopKoin()
+        stopKoin()
     }
 
     @Test
@@ -44,26 +45,26 @@ class LocalModelAndroidSingleStringsTest {
             }
         }
         assertTrue(
-                "In the local model there are elements without keys",
-                allElementsHaveKey
+            "In the local model there are elements without keys",
+            allElementsHaveKey
         )
     }
 
     @Test
     fun `local model should contain correct translations count`() {
         assertEquals(
-                "Translations count differs from .xls ones",
-                EXPECTED_TRANSLATIONS_COUNT,
-                localModel?.get("pl")?.size
+            "Translations count differs from .xls ones",
+            EXPECTED_TRANSLATIONS_COUNT,
+            localModel?.get("pl")?.size
         )
     }
 
     @Test
     fun `local model should contain correct languages count`() {
         assertEquals(
-                "Languages count differs from .xls count",
-                EXPECTED_LANGUAGES_COUNT,
-                localModel?.keys?.size
+            "Languages count differs from .xls count",
+            EXPECTED_LANGUAGES_COUNT,
+            localModel?.keys?.size
         )
     }
 

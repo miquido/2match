@@ -1,7 +1,7 @@
 package com.miquido.stringtranslator.di
 
 import com.miquido.stringstranslator.diModules
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 import org.slf4j.Logger
 import org.slf4j.helpers.NOPLogger
 

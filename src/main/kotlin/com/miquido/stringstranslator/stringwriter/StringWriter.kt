@@ -7,12 +7,12 @@ import com.miquido.stringstranslator.model.translations.TranslationModel
 interface StringWriter {
 
     fun writePluralStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
-            output: String
+        translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
+        output: String
     )
 
     fun writeSingleStringsDataToFile(
-            translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
-            output: String
+        translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
+        output: String
     )
 }
