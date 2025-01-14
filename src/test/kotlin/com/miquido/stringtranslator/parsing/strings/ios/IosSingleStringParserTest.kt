@@ -26,8 +26,7 @@ class IosSingleStringParserTest {
 
     @Test
     fun `string files model should have correct languages count`() {
-        val parsedStringsModel =
-            stringParser.parseStringsFile(RES_IOS_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringsModel = stringParser.parseStringsFile(RES_IOS_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         assertEquals(
             EXPECTED_LANGUAGES_COUNT,
             parsedStringsModel.singleStringSet.singleString.keys.size,
@@ -37,8 +36,7 @@ class IosSingleStringParserTest {
 
     @Test
     fun `string files model should have correct keys count`() {
-        val parsedStringsModel =
-            stringParser.parseStringsFile(RES_IOS_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringsModel = stringParser.parseStringsFile(RES_IOS_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         parsedStringsModel.singleStringSet.singleString.values.forEach {
             assertEquals(
                 EXPECTED_ALL_KEYS_COUNT,
@@ -50,8 +48,7 @@ class IosSingleStringParserTest {
 
     @Test
     fun `string files model should values even with missing keys`() {
-        val parsedStringsModel =
-            stringParser.parseStringsFile(RES_IOS_MISSING_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringsModel = stringParser.parseStringsFile(RES_IOS_MISSING_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         val baseLangSingleStrings =
             parsedStringsModel
                 .singleStringSet
@@ -76,8 +73,7 @@ class IosSingleStringParserTest {
 
     @Test
     fun `languages with missing keys should have integrity with base language`() {
-        val parsedStringsModel =
-            stringParser.parseStringsFile(RES_IOS_MISSING_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringsModel = stringParser.parseStringsFile(RES_IOS_MISSING_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         val baseLangSingleStrings =
             parsedStringsModel
                 .singleStringSet

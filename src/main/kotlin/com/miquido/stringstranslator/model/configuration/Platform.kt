@@ -75,31 +75,18 @@ class Ios : Platform() {
     companion object {
 
         /**
-         * Format of iOS single string
-         */
-        const val SINGLE_STRING_FORMAT = "\"%s\" = \"%s\";"
-
-        const val KEY_LOCALIZED_STRING = "NSStringLocalizedFormatKey"
-        const val VALUE_LOCALIZED_STRING = "%#@value@"
-        const val VALUE = "value"
-        const val KEY_FORMAT_SPEC = "NSStringFormatSpecTypeKey"
-        const val VALUE_FORMAT_SPEC = "NSStringPluralRuleType"
-        const val KEY_FORMAT_VALUE_TYPE = "NSStringFormatValueTypeKey"
-        const val VALUE_FORMAT_VALUE_TYPE = "d"
-
-        /**
          * Map with characters that need escaping when putting them in strings
          */
         val ESCAPE_SYMBOLS_MAP = biMapOf(
-            "\"" to "\\\"",
+            "\\n" to "\n",
             "%s" to "%@",
-            "[_]" to "\\U00A0"
+            "[_]" to "\u00A0"
         )
 
         private const val KEY_COLUMN_INDEX = 0
         private const val PLATFORM_NAME = "iOS"
-        private const val SINGLE_STRINGS_FILE_NAME = "Localizable.strings"
-        private const val PLURAL_STRINGS_FILE_NAME = "Localizable.stringsdict"
+        private const val SINGLE_STRINGS_FILE_NAME = "Localizable.xcstrings"
+        private const val PLURAL_STRINGS_FILE_NAME = "Localizable.xcstrings"
     }
 }
 
@@ -144,6 +131,7 @@ class Android : Platform() {
          * Map with characters that need escaping when putting them in strings
          */
         val ANDROID_ESCAPE_SYMBOLS_MAP = biMapOf(
+            "\n" to "\\n",
             "@" to "\\@",
             "?" to "\\?",
             "<" to "&lt;",

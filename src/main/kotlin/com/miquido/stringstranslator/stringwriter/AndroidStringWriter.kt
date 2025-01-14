@@ -19,8 +19,17 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
     private val logger: Logger by inject()
     private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Android.ANDROID_ESCAPE_SYMBOLS_MAP) }
 
-    override fun writePluralStringsDataToFile(
-        translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
+    override fun write(
+        singleStrings: Map<LanguageCode, List<TranslationModel>>?,
+        pluralStrings: Map<LanguageCode, List<PluralTranslationModel>>?,
+        output: String
+    ) {
+        writeSingleStringsDataToFile(singleStrings, output)
+        writePluralStringsDataToFile(pluralStrings, output)
+    }
+
+    private fun writePluralStringsDataToFile(
+        translations: Map<LanguageCode, List<PluralTranslationModel>>?,
         output: String
     ) {
 
@@ -72,8 +81,8 @@ class AndroidStringWriter(private val baseLanguageCode: String) : StringWriter, 
         return langFileOutput.printWriter()
     }
 
-    override fun writeSingleStringsDataToFile(
-        translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
+    private fun writeSingleStringsDataToFile(
+        translations: Map<LanguageCode, List<TranslationModel>>?,
         output: String
     ) {
 

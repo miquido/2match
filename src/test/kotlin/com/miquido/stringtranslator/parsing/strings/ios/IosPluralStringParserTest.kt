@@ -26,8 +26,7 @@ class IosPluralStringParserTest {
 
     @Test
     fun `string files model should have correct languages count`() {
-        val parsedStringModel =
-            stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringModel = stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         assertEquals(
             EXPECTED_LANGUAGES_COUNT,
             parsedStringModel.pluralStringSet.pluralString.size,
@@ -37,8 +36,7 @@ class IosPluralStringParserTest {
 
     @Test
     fun `strings file model should have correct count of plurals collection`() {
-        val parsedStringModel =
-            stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringModel = stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         assertEquals(
             EXPECTED_PLURAL_COLLECTION_COUNT,
             parsedStringModel
@@ -53,8 +51,7 @@ class IosPluralStringParserTest {
 
     @Test
     fun `string files model should have correct count of items in each plural collection`() {
-        val parsedStringModel =
-            stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringModel = stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         parsedStringModel
             .pluralStringSet
             .pluralString[BASE_LANGUAGE_ALL_KEYS]
@@ -70,8 +67,7 @@ class IosPluralStringParserTest {
 
     @Test
     fun `languages with missing keys should have integrity with base language`() {
-        val parsedStringsModel =
-            stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
+        val parsedStringsModel = stringParser.parseStringsFile(RES_EASY_BASE_DIR_PATH, BASE_LANGUAGE_ALL_KEYS)
         val baseLangSingleStrings =
             parsedStringsModel
                 .pluralStringSet

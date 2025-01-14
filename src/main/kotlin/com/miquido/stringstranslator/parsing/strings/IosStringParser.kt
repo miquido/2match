@@ -1,109 +1,69 @@
 package com.miquido.stringstranslator.parsing.strings
 
-import com.dd.plist.NSDictionary
-import com.dd.plist.PropertyListParser
-import com.miquido.stringstranslator.model.configuration.Ios
-import com.miquido.stringstranslator.model.parsing.IosSingleStringsModel
+import com.google.gson.Gson
+import com.miquido.stringstranslator.model.parsing.Localization
 import com.miquido.stringstranslator.model.parsing.ParsedStringTranslationModel
 import com.miquido.stringstranslator.model.parsing.PluralStringSetModel
 import com.miquido.stringstranslator.model.parsing.PluralStringValuesModel
 import com.miquido.stringstranslator.model.parsing.SingleStringSetModel
 import com.miquido.stringstranslator.model.parsing.SingleStringValuesModel
-import com.miquido.stringstranslator.model.parsing.strings.StringsFilePath
-import com.miquido.stringstranslator.model.parsing.strings.StringsFilePathFactory
+import com.miquido.stringstranslator.model.parsing.XcStrings
 import com.miquido.stringstranslator.model.translations.IosTranslationModel
 import com.miquido.stringstranslator.model.translations.LanguageCode
 import com.miquido.stringstranslator.model.translations.PluralQualifier
 import com.miquido.stringstranslator.model.translations.PluralTranslationModel
-import com.miquido.stringstranslator.model.translations.TranslationModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
 
 class IosStringParser : StringParser, KoinComponent {
 
-    private val stringsFilePathFactory: StringsFilePathFactory by inject()
+    private val gson: Gson by inject()
 
     override fun parseStringsFile(inputStringPath: String, baseLanguageCode: String): ParsedStringTranslationModel {
-
         val singleStringsMap = LinkedHashMap<LanguageCode, SingleStringValuesModel>()
         val pluralStringsMap = LinkedHashMap<LanguageCode, PluralStringValuesModel>()
+
         File(inputStringPath).walkTopDown()
             .map { it.invariantSeparatorsPath }
-            .filter { it.matches(Regex(STRING_FILE_PATTERN)) }
-            .filterNotNull()
-            .forEach {
-                val stringsFilePath = stringsFilePathFactory
-                    .getStringsFilePath(Ios(), it)
-                val languageCode = stringsFilePath.getLanguageCodeFromPath(baseLanguageCode)
+            .filter { it.matches(Regex(XC_STRINGS_FILE_PATTERN)) }
+            .forEach { filePath ->
+                val jsonFile = File(filePath)
+                val xcStrings: XcStrings = gson.fromJson(jsonFile.readText(), XcStrings::class.java)
 
-                if (stringsFilePath.isPluralStringsFilePath()) {
-                    pluralStringsMap[languageCode] =
-                        parseValuesForPluralsFile(stringsFilePath)
-                } else {
-                    singleStringsMap[languageCode] =
-                        parseValuesForSingleStringsFile(stringsFilePath)
+                xcStrings.strings.entries.forEach { (key, value) ->
+                    value.localizations.entries.forEach { (languageCode, localization) ->
+                        val pluralTranslation = localization.getPlurals()
+                        val singleTranslation = localization.stringUnit?.value
+                        if (pluralTranslation != null) {
+                            pluralStringsMap.computeIfAbsent(languageCode) { PluralStringValuesModel() }
+                            pluralStringsMap[languageCode]
+                                ?.pluralStringValue
+                                ?.put(key, PluralTranslationModel(key, pluralTranslation))
+                        } else if (singleTranslation != null) {
+                            singleStringsMap.computeIfAbsent(languageCode) { SingleStringValuesModel() }
+                            singleStringsMap[languageCode]
+                                ?.singleStringValue
+                                ?.put(key, IosTranslationModel(key, singleTranslation))
+                        }
+                    }
                 }
             }
+
         return ParsedStringTranslationModel(
-            SingleStringSetModel(singleStringsMap),
-            PluralStringSetModel(pluralStringsMap)
+            singleStringSet = SingleStringSetModel(singleStringsMap),
+            pluralStringSet = PluralStringSetModel(pluralStringsMap)
         )
     }
 
-    private fun parseValuesForPluralsFile(filePath: StringsFilePath): PluralStringValuesModel {
-        val pluralStringsValuesModel = LinkedHashMap<String, PluralTranslationModel>()
-        (PropertyListParser.parse(filePath.value) as NSDictionary).forEach {
-            val pluralsMap = hashMapOf<PluralQualifier, String>()
-            val translationModel = PluralTranslationModel(it.key, pluralsMap)
-            val localizedStringsWithFormatKey =
-                (it.value as NSDictionary)[Ios.KEY_LOCALIZED_STRING].toString()
-            val localizedStringsKeyNoFormat =
-                Regex(LETTERS_ONLY_PATTERN)
-                    .find(localizedStringsWithFormatKey)
-                    ?.groupValues
-                    ?.firstOrNull()
-                    ?: throw Exception(
-                        "Cannot find value from NSStringLocalizedFormatKey " +
-                            "which is used as key for plurals map"
-                    )
-            ((it.value as NSDictionary).objectForKey(localizedStringsKeyNoFormat) as NSDictionary)
-                .let { pluralsDict ->
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.ZERO, pluralsDict)
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.ONE, pluralsDict)
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.TWO, pluralsDict)
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.FEW, pluralsDict)
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.MANY, pluralsDict)
-                    pluralsMap.addIfStringValuePresent(PluralQualifier.OTHER, pluralsDict)
-                }
-            if (it.key.isNotEmpty()) pluralStringsValuesModel[it.key] = translationModel
-        }
-        return PluralStringValuesModel(pluralStringsValuesModel)
-    }
-
-    private fun HashMap<PluralQualifier, String>.addIfStringValuePresent(
-        qualifier: PluralQualifier,
-        dict: NSDictionary
-    ) {
-        val dictKey = qualifier.toString()
-        if (dict.containsKey(dictKey)) {
-            put(qualifier, dict.objectForKey(dictKey).toString())
-        }
-    }
-
-    private fun parseValuesForSingleStringsFile(filePath: StringsFilePath): SingleStringValuesModel {
-
-        val iosStringsModel = IosSingleStringsModel()
-        iosStringsModel.load(File(filePath.value))
-        val singleStringsValuesModel = LinkedHashMap<String, TranslationModel>()
-        iosStringsModel
-            .map { Pair(it.key, IosTranslationModel(it.key, it.value)) }
-            .forEach { if (it.first.isNotEmpty()) singleStringsValuesModel[it.first] = it.second }
-        return SingleStringValuesModel(singleStringsValuesModel)
-    }
+    private fun Localization.getPlurals(): Map<PluralQualifier, String>? =
+        (variations?.plural ?: substitutions?.values?.firstOrNull()?.variations?.plural)
+            ?.entries
+            ?.associate { (key, value) -> PluralQualifier.valueOf(key.uppercase()) to value.stringUnit?.value.orEmpty() }
+            ?.toMutableMap()
 
     companion object {
-        private const val LETTERS_ONLY_PATTERN = "[a-zA-Z]+"
-        private const val STRING_FILE_PATTERN = ".*\\.lproj/.*strings.*"
+        private const val XC_STRINGS_FILE_PATTERN = ".*\\.xcstrings"
     }
 }
+

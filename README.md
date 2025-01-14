@@ -31,11 +31,19 @@ handling placeholders
 
 ## **Input format**
 #### Converting from a spreadsheet to string files
-A spreadsheet in a format presented in the `strings_spreadsheet_SAMPLE.ods` is required. All fields that are **bolded** must be present in the input spreadsheet under the same name and order. 2match generates 2 strings files into each values directory: `strings.xml` or `Localizable.strings` and `strings_plural.xml` or `Localizable.stringsdict`. The easiest way to start is to either copy the provided sample spreadsheet or generate it using 2match in the *toSpreadsheet* mode.
+A spreadsheet in a format presented in the `strings_spreadsheet_SAMPLE.ods` is required. All fields that are **bolded** must be present in the input spreadsheet under the same name and order. Using this spreadsheet, 2match generates: 
+* Android: Two files in the values directory — `strings.xml` for single strings and `strings_plural.xml` for plural strings.
+* Web: Two files in the lang-CODE directory — `strings.json` for single strings and `strings_plural.json` for plural strings.
+* iOS: A single file — `Localizable.xcstrings`.
+
+The easiest way to start is to either copy the provided sample spreadsheet or generate it using 2match in the *toSpreadsheet* mode.
 
 #### Converting from strings files to spreadsheet
-To convert existing strings to a spreadsheet there is only one requirement: plural strings must be kept in a separate file than single strings. Single strings file has to be named `strings.xml` or `Localizable.strings` and plural strings must be kept in `strings_plural.xml` or `Localizable.stringsdict` file.
-
+To convert existing string files into a spreadsheet:
+* For Android and Web, plural strings must be in separate files from single strings:
+  * Single strings: `strings.xml` (Android) or `strings.json` (Web). 
+  * Plural strings: `strings_plural.xml` (Android) or `strings_plural.json` (Web).
+* For iOS, all strings — single and plural — must be in a single file named `Localizable.xcstrings`
 
 ## **Getting started**
 
@@ -166,62 +174,198 @@ Plural strings file contains a list of string variants according to plural quali
 [read about Android plural string resources and plural qualifiers meaning from Android developer portal](https://developer.android.com/guide/topics/resources/string-resource#Plurals)
 
 ### iOS
-String files are kept in a language specific directory, e.g. `pl.lproj` (contains Polish resources), `en.lproj` (contains English resources). iOS uses two different formats for single and plural string resources.
+String files are kept in Xcode string catalog (`.xcstrings`) files.
 
 #### Single strings
-Single strings resources are kept in a simple properties-like (key-value) file.
+Single strings resources are kept as json structure.
 
-```properties
-"common.cancel" = "Cancel";
-"common.ok" = "OK";
-"common.skip" = "Skip";
+```json
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "common.cancel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anuluj"
+          }
+        }
+      }
+    },
+    "common.ok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "common.skip": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomiń"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
 ```
 
-format: "key" = "value"; key and value are always between `" "`; notice the `;` at the end of a line; 
-
-*left hand value* - name of the string; not visible for the app user; used by a developer to reference the string (serves as an ID of the string);
-
-*right hand value* - the actual string displayed to the user;
-
 #### Plural strings
-Plural string resources are kept in [plist files](https://en.wikipedia.org/wiki/Property_list). They define string variants for plural qualifiers.
-```xml
-<dict>
-    <key>show offers %d</key> ==> name of the string; not visible for the app user; used by a developer to reference the string (serves as an ID of the string);
-    <dict>
-        <key>NSStringLocalizedFormatKey</key>
-        <string>%#@value@</string>
-        <key>value</key>
-        <dict>
-            <key>NSStringFormatSpecTypeKey</key>
-            <string>NSStringPluralRuleType</string>
-            <key>NSStringFormatValueTypeKey</key>
-            <string>d</string>
-            <key>zero</key> ==> actual strings visible to users for string qualifiers start here
-            <string>No offers</string>
-            <key>one</key>
-            <string>Show %d offer</string>
-            <key>two</key>
-            <string>Show %d offers</string>
-            <key>few</key>
-            <string>Show %d offers</string>
-            <key>many</key>
-            <string>Show %d offers</string>
-            <key>other</key>
-            <string>Show %d offers</string>
-        </dict>
-    </dict>
-    ... some more strings
-</dict>
+Plural string are kept as json structure, together with single strings.
+```json
+{
+  "sourceLanguage": "en",
+  "strings": {
+    // Some translations ... 
+    "show offers %d": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@value@"
+          },
+          "substitutions": {
+            "value": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "zero": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "No offers"
+                    }
+                  },
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Show %d offer"
+                    }
+                  },
+                  "two": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Show %d offers"
+                    }
+                  },
+                  "few": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Show %d offers"
+                    }
+                  },
+                  "many": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Show %d offers"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Show %d offers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@value@"
+          },
+          "substitutions": {
+            "value": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "zero": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Brak ofert"
+                    }
+                  },
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Pokaż %d ofertę"
+                    }
+                  },
+                  "two": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Pokaż %d offerty"
+                    }
+                  },
+                  "few": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Pokaż %d offerty"
+                    }
+                  },
+                  "many": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Pokaż %d offert"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Pokaż %d offert"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    // Some translations ... 
+  },
+  "version": "1.0"
+}
 ```
 
 *plural qualifiers* - zero, one, two, few, many, other - define which string variant should be used; not all quantity strings are used in all languages 
 
 *value for qualifier* - the actual string displayed to the user; iOS takes specific variant based on the passed number;
 
+The Xcode string catalog editor does not natively support pluralization without a numerical placeholder. To address this, plurals are wrapped in a substitution structure, allowing placeholders to be omitted from the displayed strings. This approach enables the creation of plurals like one: `hour` and other: `hours` without requiring a visible number in the output.
+
 #### Resources
-[read about plist format from Apple developer portal](https://en.wikipedia.org/wiki/Property_list)  
-[read about plural strings resources and plural qualifiers from Apple developer portal](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPInternational/LocalizingYourApp/LocalizingYourApp.html#//apple_ref/doc/uid/10000171i-CH5-SW10)
+[read about xcode string catalog on Apple developer portal](https://developer.apple.com/documentation/xcode/localizing-and-varying-text-with-a-string-catalog)  
+[read about plural strings without numerical placeholders](https://forums.developer.apple.com/forums/thread/737329)
 
 ### Web
 On Web platforms there is no single method of storing translations defined. We decided to use JSON files for both single and plural translations, keeping a directory and file structure for each language (each language directory has two files - one with single and one with plural strings).

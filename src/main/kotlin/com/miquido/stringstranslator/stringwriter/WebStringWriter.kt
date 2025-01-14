@@ -19,8 +19,17 @@ class WebStringWriter : StringWriter, KoinComponent {
     private val gson: Gson by inject()
     private val htmlAwareEscaper: StringHtmlAwareEscaper by inject { parametersOf(Web.WEB_ESCAPE_SYMBOLS_MAP) }
 
-    override fun writePluralStringsDataToFile(
-        translations: MutableMap<LanguageCode, MutableList<PluralTranslationModel>>?,
+    override fun write(
+        singleStrings: Map<LanguageCode, List<TranslationModel>>?,
+        pluralStrings: Map<LanguageCode, List<PluralTranslationModel>>?,
+        output: String
+    ) {
+        writeSingleStringsDataToFile(singleStrings, output)
+        writePluralStringsDataToFile(pluralStrings, output)
+    }
+
+    private fun writePluralStringsDataToFile(
+        translations: Map<LanguageCode, List<PluralTranslationModel>>?,
         output: String
     ) {
 
@@ -37,8 +46,8 @@ class WebStringWriter : StringWriter, KoinComponent {
         }
     }
 
-    override fun writeSingleStringsDataToFile(
-        translations: MutableMap<LanguageCode, MutableList<TranslationModel>>?,
+    private fun writeSingleStringsDataToFile(
+        translations: Map<LanguageCode, List<TranslationModel>>?,
         output: String
     ) {
 

@@ -15,7 +15,7 @@ interface StringsFilePath {
 
 class StringsFilePathFactory {
     fun getStringsFilePath(platform: Platform, path: String) = when (platform) {
-        is Ios -> IosStringsFilePath(path)
+        is Ios -> throw IllegalStateException("Ios platform is not supported")
         is Android -> AndroidStringsFilePath(path)
         is Web -> WebStringsFilePath(path)
     }

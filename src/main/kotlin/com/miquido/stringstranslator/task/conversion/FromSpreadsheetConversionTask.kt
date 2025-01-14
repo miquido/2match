@@ -28,9 +28,13 @@ class FromSpreadsheetConversionTask(
         val singleStringsTranslations = rawTranslations.stringsSingle.mapToSingleStringsLocalModel(platform, logger)
         val pluralStringsTranslations = rawTranslations.stringsPlural.mapToPluralStringsLocalModel(platform, logger)
 
-        val stringsWriter = stringWriterFactory.getStringWriter(platform, baseLangCode)
-        stringsWriter.writeSingleStringsDataToFile(singleStringsTranslations, output)
-        stringsWriter.writePluralStringsDataToFile(pluralStringsTranslations, output)
+        stringWriterFactory
+            .getStringWriter(platform, baseLangCode)
+            .write(
+                singleStrings = singleStringsTranslations,
+                pluralStrings = pluralStringsTranslations,
+                output = output
+            )
     }
 }
 
